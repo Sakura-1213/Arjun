@@ -72,7 +72,7 @@ def compare(response, factors, params):
         if urlparse(response.headers.get('Location', '')).path != factors['same_redirect']:
             return ('redirection', params, 'same_redirect')
     if factors['same_body'] is not None and response.text != factors['same_body']:
-        return ('body length', params, 'same_body')
+        return ('body changed', params, 'same_body')
     if factors['lines_num'] is not None and response.text.count('\n') != factors['lines_num']:
         return ('number of lines', params, 'lines_num')
     if factors['same_plaintext'] is not None and remove_tags(response.text) != factors['same_plaintext']:
