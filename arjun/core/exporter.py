@@ -1,5 +1,7 @@
 import json
+from datetime import datetime
 import requests
+import arjun
 
 import arjun.core.config as mem
 from arjun.core.utils import populate
@@ -11,8 +13,14 @@ def json_export(result):
     """
     exports result to a file in JSON format
     """
+    enriched={}
+    for url,data in result.items():
+        entry=data.copy()
+        entry['arjun_version']=arjun.__version__
+        entry['scan_time']=datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        enriched[url] = entry
     with open(mem.var['json_file'], 'w+', encoding='utf8') as json_output:
-        json.dump(result, json_output, sort_keys=True, indent=4)
+        json.dump(enriched, json_output, sort_keys=True, indent=4)
 
 
 def burp_export(result):
